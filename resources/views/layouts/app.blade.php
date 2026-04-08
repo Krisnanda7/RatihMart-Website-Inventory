@@ -23,10 +23,10 @@
             --info-bg:    #E6F1FB; --info-text:    #185FA5;
         }
         body { font-family: var(--font); background: var(--bg-page); color: var(--text-primary); font-size: 14px; line-height: 1.5; display: flex; min-height: 100vh; }
-        .sidebar { width: var(--sidebar-width); background: var(--bg-white); border-right: var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
-        .sidebar-brand { padding: 18px 16px 14px; border-bottom: var(--border); }
+        .sidebar { width: var(--sidebar-width); background: var(--bg-white); border-right: var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; overflow-y: auto; }
+        .sidebar-brand { padding: 18px 16px 14px; border-bottom: var(--border); flex-shrink: 0; }
         .brand-logo { display: flex; align-items: center; gap: 9px; }
-        .brand-icon { width: 30px; height: 30px; background: var(--brand); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; }
+        .brand-icon { width: 30px; height: 30px; background: var(--brand); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .brand-name { font-size: 14px; font-weight: 600; }
         .brand-sub  { font-size: 11px; color: var(--text-muted); margin-top: 2px; padding-left: 39px; }
         .nav-section { padding: 10px 0; }
@@ -36,7 +36,7 @@
         .nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
         .nav-item.active { color: var(--brand); background: var(--brand-light); border-left-color: var(--brand); font-weight: 500; }
         .nav-badge { margin-left: auto; background: var(--danger-bg); color: var(--danger-text); font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 10px; }
-        .sidebar-footer { margin-top: auto; border-top: var(--border); padding: 10px 16px; }
+        .sidebar-footer { margin-top: auto; border-top: var(--border); padding: 10px 16px; flex-shrink: 0; }
         .user-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--brand-light); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--brand); flex-shrink: 0; }
         .main-wrapper { margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .topbar { height: var(--topbar-height); background: var(--bg-white); border-bottom: var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; position: sticky; top: 0; z-index: 50; }
@@ -64,6 +64,12 @@
         .alert-warning { background: var(--warning-bg); color: var(--warning-text); border: 1px solid #FAC775; }
         .alert-danger  { background: var(--danger-bg);  color: var(--danger-text);  border: 1px solid #F7C1C1; }
         .alert-success { background: var(--success-bg); color: var(--success-text); border: 1px solid #C0DD97; }
+        @media print {
+            .sidebar, .topbar { display: none !important; }
+            .main-wrapper { margin-left: 0 !important; }
+            .page-content { padding: 0 !important; }
+            .no-print { display: none !important; }
+        }
     </style>
     @stack('styles')
 </head>
@@ -82,7 +88,8 @@
         </div>
         <div class="brand-sub">Sistem Manajemen Grosir</div>
     </div>
-    <nav>
+
+    <nav style="flex:1;">
         <div class="nav-section">
             <div class="nav-label">Utama</div>
             <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
@@ -90,17 +97,19 @@
                 Dashboard
             </a>
         </div>
+
         <div class="nav-section">
             <div class="nav-label">Penjualan</div>
-            <a href="{{ route('transaksi.index') }}" class="nav-item {{ request()->routeIs('transaksi.*') ? 'active' : '' }}">
+            <a href="{{ route('transaksi.index') }}" class="nav-item {{ request()->routeIs('transaksi.index') ? 'active' : '' }}">
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 3h12M2 8h12M2 13h7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
                 Daftar Transaksi
             </a>
-            <a href="{{ route('transaksi.create') }}" class="nav-item">
+            <a href="{{ route('transaksi.create') }}" class="nav-item {{ request()->routeIs('transaksi.create') ? 'active' : '' }}">
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
                 Buat Transaksi
             </a>
         </div>
+
         <div class="nav-section">
             <div class="nav-label">Inventaris</div>
             <a href="{{ route('barang.index') }}" class="nav-item {{ request()->routeIs('barang.*') ? 'active' : '' }}">
@@ -111,7 +120,20 @@
                 @endif
             </a>
         </div>
+
+        <div class="nav-section">
+            <div class="nav-label">Laporan</div>
+            <a href="{{ route('laporan.penjualan') }}" class="nav-item {{ request()->routeIs('laporan.penjualan') ? 'active' : '' }}">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M2 12L5.5 7.5l3 3L11 5l3 4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Laporan Penjualan
+            </a>
+            <a href="{{ route('laporan.laba-rugi') }}" class="nav-item {{ request()->routeIs('laporan.laba-rugi') ? 'active' : '' }}">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3l2 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                Laba Rugi
+            </a>
+        </div>
     </nav>
+
     <div class="sidebar-footer">
         <div style="display:flex;align-items:center;gap:9px;padding:6px 0;">
             <div class="user-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'R', 0, 2)) }}</div>
@@ -144,10 +166,16 @@
 
     <main class="page-content">
         @if(session('success'))
-            <div class="alert alert-success">✓ {{ session('success') }}</div>
+            <div class="alert alert-success">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M5 8l2 2 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                {{ session('success') }}
+            </div>
         @endif
         @if(session('error'))
-            <div class="alert alert-danger">✕ {{ session('error') }}</div>
+            <div class="alert alert-danger">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3M8 10v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                {{ session('error') }}
+            </div>
         @endif
 
         @yield('content')
