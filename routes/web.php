@@ -34,7 +34,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // API: cari barang (autocomplete form transaksi)
     Route::get('/api/barang/search', function (\Illuminate\Http\Request $request) {
         $q       = $request->get('q', '');
-        $results = Barang::where('nama_barang', 'like', "%{$q}%")
+        $results = \App\Models\Barang::where('nama_barang', 'like', "%{$q}%")
             ->orWhere('kode_barang', 'like', "%{$q}%")
             ->select('id', 'kode_barang', 'nama_barang', 'harga_jual', 'stok', 'satuan')
             ->limit(10)->get();
