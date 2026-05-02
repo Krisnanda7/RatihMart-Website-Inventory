@@ -25,10 +25,12 @@ test.describe("Berhasil mencetak laporan penjualan", () => {
         const url_laporan_penjualan = process.env.LAPORAN_PENJUALAN_API_KEY!;
         await page.goto(url_laporan_penjualan);
         await page.waitForTimeout(1000);
-        // Mengisi filter tanggal
-        await page.locator('input[name="start_date"]').fill("2024-01-01");
+
+        // Mengisi filter tanggal di bulanan
+        await page.locator("select").first().selectOption("Bulanan");
         await page.waitForTimeout(1000);
-        await page.locator('input[name="end_date"]').fill("2024-12-31");
+        // Klik tombol "Tampilkan Laporan"
+        await page.getByRole("button", { name: /Tampilkan/i }).click();
         await page.waitForTimeout(1000);
         // Klik tombol "Cetak Laporan"
         await page.getByRole("button", { name: /Cetak Laporan/i }).click();
