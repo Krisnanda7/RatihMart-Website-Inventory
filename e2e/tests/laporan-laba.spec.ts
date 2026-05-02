@@ -22,7 +22,7 @@ test.describe("Fitur Laporan Laba", () => {
         await page.waitForTimeout(1000);
 
         // Mengisi filter tanggal di bulanan
-        await page.locator("input[type='month']").fill("May 2026");
+        await page.locator("input[type='month']").fill("2026-05");
         await page.waitForTimeout(1000);
 
         //klik tombol "Tampilkan Laporan"
