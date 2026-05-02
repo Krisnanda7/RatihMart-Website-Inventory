@@ -20,5 +20,16 @@ test.describe("Fitur Laporan Laba", () => {
         const url_laporan_laba = process.env.LAPORAN_LABA_API_KEY!;
         await page.goto(url_laporan_laba);
         await page.waitForTimeout(1000);
+
+        // Mengisi filter tanggal di bulanan
+        await page.locator("input[type='month']").fill("May 2026");
+        await page.waitForTimeout(1000);
+
+        //klik tombol "Tampilkan Laporan"
+        await page.getByRole("button", { name: /Tampilkan/i }).click();
+        await page.waitForTimeout(1000);
+
+        // Assert bahwa kita berada di halaman laporan laba
+        await expect(page).toHaveURL(/.*laporan/);
     });
 });
