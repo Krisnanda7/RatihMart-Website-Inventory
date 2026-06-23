@@ -11,6 +11,7 @@
         </div>
         <div style="display:flex;gap:8px;">
             <a href="{{ route('barang.edit', $barang) }}" class="btn btn-primary">Edit Barang</a>
+            <a href="{{ route('barang.stok-masuk', $barang) }}" class="btn btn-outline">Tambah Stok</a>
         </div>
     </div>
 </div>

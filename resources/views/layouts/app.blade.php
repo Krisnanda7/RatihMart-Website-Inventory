@@ -119,6 +119,10 @@
                     <span class="nav-badge">{{ $stockAlertCount }}</span>
                 @endif
             </a>
+            <a href="{{ route('stock-movements.index') }}" class="nav-item {{ request()->routeIs('stock-movements.*') ? 'active' : '' }}">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 4h8M4 8h8M4 12h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                Manajemen Stok
+            </a>
         </div>
 
         <div class="nav-section">

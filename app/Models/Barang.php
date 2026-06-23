@@ -10,6 +10,7 @@ class Barang extends Model
 {
     //
     use HasFactory, SoftDeletes;
+
     protected $table = 'barangs';
 
     protected $fillable = [
@@ -25,9 +26,9 @@ class Barang extends Model
     ];
 
     protected $casts = [
-        'harga_beli'   => 'integer',
-        'harga_jual'   => 'integer',
-        'stok'         => 'integer',
+        'harga_beli' => 'integer',
+        'harga_jual' => 'integer',
+        'stok' => 'integer',
         'stok_minimum' => 'integer',
     ];
 
@@ -36,12 +37,23 @@ class Barang extends Model
         return $this->hasMany(DetailTransaksi::class);
     }
 
+    public function stockMovements()
+    {
+        return $this->hasMany(StockMovement::class);
+    }
+
     public function getStatusStokAttribute(): string
     {
-        if ($this->stok <= 0) return 'habis';
-        if ($this->stok <= ($this->stok_minimum / 2)) return 'kritis';
-        if ($this->stok <= $this->stok_minimum) return 'rendah';
+        if ($this->stok <= 0) {
+            return 'habis';
+        }
+        if ($this->stok <= ($this->stok_minimum / 2)) {
+            return 'kritis';
+        }
+        if ($this->stok <= $this->stok_minimum) {
+            return 'rendah';
+        }
+
         return 'aman';
     }
-    
 }

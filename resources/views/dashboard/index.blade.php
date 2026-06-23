@@ -145,6 +145,77 @@
     </div>
 </div>
 
+<div class="card" style="margin-bottom:12px;">
+    <div class="card-header">
+        <span class="card-title">Pergerakan Stok Minggu Ini</span>
+        <span style="font-size:12px;color:var(--text-muted);">Masuk / Keluar</span>
+    </div>
+    <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:start;">
+            <div>
+                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px;align-items:end;min-height:140px;">
+                    @foreach($stockMovement as $row)
+                        <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
+                            <div style="width:100%;background:#F0F0EC;border-radius:10px;overflow:hidden;position:relative;height:100px;">
+                                <div style="width:100%;height:{{ $row['total_in'] / max($stockMovement->max('total_in'), 1) * 100 }}%;background:#1D9E75;position:absolute;bottom:0;"></div>
+                                <div style="width:100%;height:{{ $row['total_out'] / max($stockMovement->max('total_out'), 1) * 100 }}%;background:#A32D2D;position:absolute;bottom:0;opacity:.75;"></div>
+                            </div>
+                            <div style="font-size:11px;color:var(--text-muted);">{{ $row['tanggal'] }}</div>
+                        </div>
+                    @endforeach
+                </div>
+                <div style="display:flex;gap:12px;margin-top:12px;font-size:12px;">
+                    <div style="display:flex;align-items:center;gap:6px;color:var(--success-text);">
+                        <span style="width:10px;height:10px;border-radius:50%;background:#1D9E75;display:inline-block;"></span>
+                        Masuk
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;color:var(--danger-text);">
+                        <span style="width:10px;height:10px;border-radius:50%;background:#A32D2D;display:inline-block;"></span>
+                        Keluar
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="background:var(--bg-page);border-radius:var(--radius-md);padding:14px;">
+                    <div style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;">Total masuk</div>
+                    <div style="font-size:22px;font-weight:600;color:var(--success-text);">{{ number_format($stockMovement->sum('total_in')) }}</div>
+                </div>
+                <div style="background:var(--bg-page);border-radius:var(--radius-md);padding:14px;">
+                    <div style="font-size:11px;color:var(--text-secondary);margin-bottom:8px;">Total keluar</div>
+                    <div style="font-size:22px;font-weight:600;color:var(--danger-text);">{{ number_format($stockMovement->sum('total_out')) }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom:12px;">
+    <div class="card-header">
+        <span class="card-title">Top Stok Tersedia</span>
+        <a href="{{ route('barang.index') }}" class="card-action">Kelola barang →</a>
+    </div>
+    <div class="card-body">
+        @if($currentStockTop->isEmpty())
+            <div style="padding:24px 0;text-align:center;color:var(--text-muted);font-size:13px;">Belum ada data stok</div>
+        @else
+            <div style="display:grid;gap:12px;">
+                @foreach($currentStockTop as $barang)
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:#F8F9F6;border-radius:var(--radius-md);">
+                        <div>
+                            <div style="font-size:13px;font-weight:600;color:var(--text-primary);">{{ $barang->nama_barang }}</div>
+                            <div style="font-size:11px;color:var(--text-secondary);">{{ $barang->kategori ?? 'Tanpa kategori' }}</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:16px;font-weight:600;color:var(--brand);">{{ $barang->stok }}</div>
+                            <div style="font-size:11px;color:var(--text-muted);">{{ $barang->satuan }}</div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+</div>
+
 @if($barangStokRendah->count() > 0)
 <div class="card">
     <div class="card-header">
