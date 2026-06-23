@@ -78,6 +78,23 @@
     </div>
 </div>
 
+<div class="card" style="margin-bottom:12px;">
+    <div class="card-header">
+        <span class="card-title">Laporan Cepat</span>
+        <span style="font-size:12px;color:var(--text-muted);">Akses cepat laporan penjualan & laba rugi</span>
+    </div>
+    <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <a href="{{ route('laporan.penjualan') }}" class="btn btn-outline" style="justify-content:center;min-height:86px;align-items:center;display:flex;flex-direction:column;gap:8px;text-align:center;padding:18px;">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2 12L5.5 7.5l3 3L11 5l3 4.5" stroke="#185FA5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Laporan Penjualan
+        </a>
+        <a href="{{ route('laporan.laba-rugi') }}" class="btn btn-outline" style="justify-content:center;min-height:86px;align-items:center;display:flex;flex-direction:column;gap:8px;text-align:center;padding:18px;">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#185FA5" stroke-width="1.3"/><path d="M8 5v3l2 2" stroke="#185FA5" stroke-width="1.3" stroke-linecap="round"/></svg>
+            Laporan Laba Rugi
+        </a>
+    </div>
+</div>
+
 <div style="display:grid;grid-template-columns:1.2fr 0.8fr;gap:12px;margin-bottom:12px;">
     <div class="card">
         <div class="card-header">
@@ -153,12 +170,23 @@
     <div class="card-body">
         <div style="display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:start;">
             <div>
-                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:10px;align-items:end;min-height:140px;">
+                @php
+                    $stockMax = max($stockMovement->max('total_in'), $stockMovement->max('total_out'), 1);
+                @endphp
+                <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:12px;align-items:end;min-height:180px;">
                     @foreach($stockMovement as $row)
-                        <div style="display:flex;flex-direction:column;gap:4px;align-items:center;">
-                            <div style="width:100%;background:#F0F0EC;border-radius:10px;overflow:hidden;position:relative;height:100px;">
-                                <div style="width:100%;height:{{ $row['total_in'] / max($stockMovement->max('total_in'), 1) * 100 }}%;background:#1D9E75;position:absolute;bottom:0;"></div>
-                                <div style="width:100%;height:{{ $row['total_out'] / max($stockMovement->max('total_out'), 1) * 100 }}%;background:#A32D2D;position:absolute;bottom:0;opacity:.75;"></div>
+                        <div style="display:flex;flex-direction:column;gap:10px;align-items:center;">
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;align-items:end;height:140px;">
+                                <div style="width:100%;background:#EAF3DE;border-radius:8px 8px 0 0;display:flex;align-items:flex-end;justify-content:center;">
+                                    <div style="width:14px;height:{{ $stockMax ? round(($row['total_in'] / $stockMax) * 100) : 0 }}%;background:#1D9E75;border-radius:8px 8px 0 0;"></div>
+                                </div>
+                                <div style="width:100%;background:#FCEBEB;border-radius:8px 8px 0 0;display:flex;align-items:flex-end;justify-content:center;">
+                                    <div style="width:14px;height:{{ $stockMax ? round(($row['total_out'] / $stockMax) * 100) : 0 }}%;background:#A32D2D;border-radius:8px 8px 0 0;"></div>
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;color:var(--text-secondary);width:100%;text-align:center;">
+                                <span style="color:#1D9E75;">{{ $row['total_in'] }}</span>
+                                <span style="color:#A32D2D;">{{ $row['total_out'] }}</span>
                             </div>
                             <div style="font-size:11px;color:var(--text-muted);">{{ $row['tanggal'] }}</div>
                         </div>
