@@ -10,7 +10,7 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: #F5F5F2;
+            background: linear-gradient(135deg, #185FA5 0%, #C8DFF0 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -45,7 +45,8 @@
             font-family: inherit;
             color: #1A1A18;
             outline: none;
-            transition: border-color .15s;
+            transition: border-color .15s, background-color .15s;
+            background: #F9F9F7;
         }
         input:focus { border-color: #185FA5; }
         .field { margin-bottom: 16px; }
@@ -65,6 +66,13 @@
             margin-top: 4px;
         }
         .btn-register:hover { opacity: .88; }
+        .form-bg {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+            border: 1px solid #E0E0E0;
+        }
         .footer-link { text-align: center; margin-top: 18px; font-size: 12px; color: #9B9B96; }
         .footer-link a { color: #185FA5; text-decoration: none; }
     </style>
@@ -85,32 +93,34 @@
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
-        <div class="field">
-            <label>Nama Lengkap</label>
-            <input type="text" name="name" value="{{ old('name') }}" required autofocus
-                placeholder="Ratih"
-                style="{{ $errors->has('name') ? 'border-color:#A32D2D;' : '' }}">
-            @error('name') <div class="error">{{ $message }}</div> @enderror
-        </div>
+        <div class="form-bg">
+            <div class="field">
+                <label>Nama Lengkap</label>
+                <input type="text" name="name" value="{{ old('name') }}" required autofocus
+                    placeholder="Ratih"
+                    style="{{ $errors->has('name') ? 'border-color:#A32D2D;' : '' }}">
+                @error('name') <div class="error">{{ $message }}</div> @enderror
+            </div>
 
-        <div class="field">
-            <label>Email</label>
-            <input type="email" name="email" value="{{ old('email') }}" required
-                placeholder="ratih@toko.com"
-                style="{{ $errors->has('email') ? 'border-color:#A32D2D;' : '' }}">
-            @error('email') <div class="error">{{ $message }}</div> @enderror
-        </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" name="email" value="{{ old('email') }}" required
+                    placeholder="ratih@toko.com"
+                    style="{{ $errors->has('email') ? 'border-color:#A32D2D;' : '' }}">
+                @error('email') <div class="error">{{ $message }}</div> @enderror
+            </div>
 
-        <div class="field">
-            <label>Password</label>
-            <input type="password" name="password" required placeholder="Min. 8 karakter"
-                style="{{ $errors->has('password') ? 'border-color:#A32D2D;' : '' }}">
-            @error('password') <div class="error">{{ $message }}</div> @enderror
-        </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" name="password" required placeholder="Min. 8 karakter"
+                    style="{{ $errors->has('password') ? 'border-color:#A32D2D;' : '' }}">
+                @error('password') <div class="error">{{ $message }}</div> @enderror
+            </div>
 
-        <div class="field">
-            <label>Konfirmasi Password</label>
-            <input type="password" name="password_confirmation" required placeholder="Ulangi password">
+            <div class="field">
+                <label>Konfirmasi Password</label>
+                <input type="password" name="password_confirmation" required placeholder="Ulangi password">
+            </div>
         </div>
 
         <button type="submit" class="btn-register">Buat Akun</button>
