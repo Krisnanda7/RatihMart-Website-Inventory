@@ -85,9 +85,10 @@
 
             <div style="margin-bottom:14px;">
                 <label style="display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:5px;">Uang Bayar (Rp)</label>
-                <input type="number" name="total_bayar" id="input-bayar" placeholder="0" min="0"
-                    oninput="hitungKembalian()"
+                <input type="text" id="input-bayar" placeholder="0" 
+                    oninput="formatInputBayar(); hitungKembalian()"
                     style="width:100%;padding:8px 12px;border:var(--border);border-radius:var(--radius-md);font-size:13px;font-family:var(--font);color:var(--text-primary);outline:none;">
+                <input type="hidden" name="total_bayar" id="input-bayar-value">
             </div>
 
             <div style="margin-bottom:16px;padding:10px 12px;background:var(--success-bg);border-radius:var(--radius-md);">
@@ -232,11 +233,27 @@ function updateTotal() {
 }
 
 function hitungKembalian() {
-    const bayar     = parseInt(document.getElementById('input-bayar').value) || 0;
+    const bayar     = parseInt(document.getElementById('input-bayar-value').value) || 0;
     const kembalian = bayar - grandTotal;
     const el        = document.getElementById('display-kembalian');
     el.textContent  = 'Rp ' + formatRp(Math.max(0, kembalian));
     el.style.color  = kembalian < 0 ? 'var(--danger-text)' : 'var(--success-text)';
+}
+
+function formatInputBayar() {
+    const input = document.getElementById('input-bayar');
+    const hidden = document.getElementById('input-bayar-value');
+    
+    // Hapus semua karakter selain angka
+    const angkaOnly = input.value.replace(/\D/g, '');
+    
+    // Simpan nilai numeric di hidden input
+    hidden.value = angkaOnly;
+    
+    // Format dengan separator period (indonesian format)
+    if (angkaOnly) {
+        input.value = parseInt(angkaOnly).toLocaleString('id-ID');
+    }
 }
 
 function formatRp(n) {
